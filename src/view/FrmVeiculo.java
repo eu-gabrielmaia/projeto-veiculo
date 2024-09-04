@@ -8,6 +8,8 @@ package view;
 import control.VeiculoControl;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Veiculo;
@@ -22,18 +24,34 @@ public class FrmVeiculo extends javax.swing.JFrame {
     /**
      * Creates new form FrmProduto
      */
-    public FrmVeiculo() {
+    public FrmVeiculo() throws SQLException, ClassNotFoundException {
         vControl = new VeiculoControl();
         dados = new DefaultTableModel();
-        dados.addColumn("Código");
-        dados.addColumn("Placa");
+
         dados.addColumn("Marca");
         dados.addColumn("Modelo");
+        dados.addColumn("Placa");
         dados.addColumn("Cor");
         dados.addColumn("Ano de fabricação");
         dados.setNumRows(0);
         initComponents();
+        mostrar();
     }
+    
+    private void mostrar() throws SQLException, ClassNotFoundException { 
+        try{
+            ArrayList<Veiculo> listaVeiculo = vControl.mostrar();
+        dados.setNumRows(0);
+        for(Veiculo v: listaVeiculo){
+            dados.addRow(new Object[]{v.getMarca(), v.getModelo(), v.getPlaca(), v.getCor(), v.getAnoFabricacao()});
+        }
+        }catch(SQLException | ClassNotFoundException e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+        tblVeiculo.setModel(dados);
+    }
+            
+            
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -62,7 +80,7 @@ public class FrmVeiculo extends javax.swing.JFrame {
         btnMostrar = new javax.swing.JButton();
         btnBuscaAno = new javax.swing.JButton();
         lblBuscaMarca = new javax.swing.JLabel();
-        tbtBuscaMarca = new javax.swing.JTextField();
+        txtBuscaMarca = new javax.swing.JTextField();
         lblBuscaAno = new javax.swing.JLabel();
         txtBuscaAno = new javax.swing.JTextField();
         lblTituloBusca = new javax.swing.JLabel();
@@ -141,7 +159,15 @@ public class FrmVeiculo extends javax.swing.JFrame {
             new String [] {
                 "Marca", "Modelo", "Placa", "Cor", "Ano de Fabricação"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tblVeiculo);
 
         btnMostrar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -163,10 +189,10 @@ public class FrmVeiculo extends javax.swing.JFrame {
         lblBuscaMarca.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblBuscaMarca.setText("Marca");
 
-        tbtBuscaMarca.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        tbtBuscaMarca.addActionListener(new java.awt.event.ActionListener() {
+        txtBuscaMarca.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtBuscaMarca.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tbtBuscaMarcaActionPerformed(evt);
+                txtBuscaMarcaActionPerformed(evt);
             }
         });
 
@@ -229,7 +255,7 @@ public class FrmVeiculo extends javax.swing.JFrame {
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(txtBuscaAno, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(btnBuscaAno, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(tbtBuscaMarca, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(txtBuscaMarca, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(btnBuscaMarca, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(69, 69, 69)
@@ -288,7 +314,7 @@ public class FrmVeiculo extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblBuscaMarca)
                         .addGap(4, 4, 4)
-                        .addComponent(tbtBuscaMarca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtBuscaMarca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnBuscaMarca)
                         .addGap(31, 31, 31)
@@ -350,18 +376,32 @@ public class FrmVeiculo extends javax.swing.JFrame {
     }//GEN-LAST:event_txtCorActionPerformed
 
     private void btnMostrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMostrarActionPerformed
-        // TODO add your handling code here:
-        ArrayList<Veiculo> listaVeiculo = vControl.mostrar();
-        dados.setNumRows(0);
-        for(Veiculo v: listaVeiculo){
-            dados.addRow(new Object[]{v.getMarca(), v.getModelo(), v.getPlaca(), v.getCor(), v.getAnoFabricacao()});
+     try {
+         // TODO add your handling code here:
+         mostrar();
+     } catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }catch(ClassNotFoundException e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
         }
-        tblVeiculo.setModel(dados);
     }//GEN-LAST:event_btnMostrarActionPerformed
 
     private void btnBuscaMarcaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscaMarcaActionPerformed
         // TODO add your handling code here:
-                tblVeiculo.setModel(dados);
+        ArrayList<Veiculo> listaMarca;
+        try{
+            String marca = txtBuscaMarca.getText();
+             listaMarca = vControl.buscarMarca(marca);
+             DefaultTableModel dados = (DefaultTableModel) tblVeiculo.getModel();
+             dados.setNumRows(0);
+             for (Veiculo v: listaMarca){
+                 dados.addRow(new Object[]{v.getMarca(), v.getModelo(), v.getPlaca(), v.getCor(), v.getAnoFabricacao()});
+             }
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }catch(ClassNotFoundException e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
 
     }//GEN-LAST:event_btnBuscaMarcaActionPerformed
 
@@ -369,7 +409,7 @@ public class FrmVeiculo extends javax.swing.JFrame {
         // TODO add your handling code here:
         ArrayList<Veiculo> listaAno;
         try{
-             listaAno = vControl.buscarAno(/*Integer.parseInt(txtBuscaAno.getText())*/);
+             listaAno = vControl.buscarAno(Integer.parseInt(txtBuscaAno.getText()));
              DefaultTableModel dados = (DefaultTableModel) tblVeiculo.getModel();
              dados.setNumRows(0);
              for (Veiculo v: listaAno){
@@ -382,18 +422,20 @@ public class FrmVeiculo extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnBuscaAnoActionPerformed
 
-    private void tbtBuscaMarcaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbtBuscaMarcaActionPerformed
+    private void txtBuscaMarcaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscaMarcaActionPerformed
         // TODO add your handling code here:
         
-    }//GEN-LAST:event_tbtBuscaMarcaActionPerformed
+    }//GEN-LAST:event_txtBuscaMarcaActionPerformed
 
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
         // TODO add your handling code here
-        /*txtMarca.getText() =;
-        String modelo = txtModelo.getText();
-        String placa = txtPlaca.getText();
-        String cor = txtCor.getText();
-        int anoFabricacao = Integer.parseInt(txtAnoFabricacao.getText*/
+        txtMarca.setText(null);
+        txtModelo.setText(null);
+        txtPlaca.setText(null);
+        txtCor.setText(null);
+        txtAnoFabricacao.setText(null);
+        txtBuscaMarca.setText(null);
+        txtBuscaAno.setText(null);
     }//GEN-LAST:event_btnLimparActionPerformed
 
     /**
@@ -427,7 +469,13 @@ public class FrmVeiculo extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FrmVeiculo().setVisible(true);
+                try {
+                    new FrmVeiculo().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(FrmVeiculo.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(FrmVeiculo.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
@@ -450,9 +498,9 @@ public class FrmVeiculo extends javax.swing.JFrame {
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JLabel lblTituloBusca;
     private javax.swing.JTable tblVeiculo;
-    private javax.swing.JTextField tbtBuscaMarca;
     private javax.swing.JTextField txtAnoFabricacao;
     private javax.swing.JTextField txtBuscaAno;
+    private javax.swing.JTextField txtBuscaMarca;
     private javax.swing.JTextField txtCor;
     private javax.swing.JTextField txtMarca;
     private javax.swing.JTextField txtModelo;

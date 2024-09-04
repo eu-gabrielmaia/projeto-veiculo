@@ -28,7 +28,9 @@ public class VeiculoControl {
         vDao.inserirVeiculo(v);
     }
 
-    public ArrayList<Veiculo> mostrar(){
+    public ArrayList<Veiculo> mostrar() throws SQLException, ClassNotFoundException{
+        VeiculoDAO vDao = new VeiculoDAO();
+        listaVeiculo = vDao.buscar();
         return listaVeiculo;
     }
     // marca, o modelo, a placa, a cor, e o ano de fabricação do veículo.
@@ -44,8 +46,13 @@ public class VeiculoControl {
         vDao.excluir(v);
     }
     
-    public ArrayList<Veiculo> buscarAno() throws ClassNotFoundException, SQLException{
+    public ArrayList<Veiculo> buscarAno(int anoFabricacao) throws ClassNotFoundException, SQLException{
         VeiculoDAO vDao = new VeiculoDAO();
-        return vDao.buscarAno();
+        return vDao.buscarAno(anoFabricacao);
+    }
+    
+    public ArrayList<Veiculo> buscarMarca(String marca) throws ClassNotFoundException, SQLException{
+        VeiculoDAO vDao = new VeiculoDAO();
+        return vDao.buscarMarca(marca);
     }
 }

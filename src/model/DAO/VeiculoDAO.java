@@ -22,7 +22,7 @@ public class VeiculoDAO {
     
     public void inserirVeiculo(Veiculo v) throws SQLException, ClassNotFoundException{
       con = new Conexao().getConnection();
-      String sql = "Insert Into Veiculo (placa, marca, modelo, cor, anoFabricacao) values (?,?,?,?,?)";
+      String sql = "INSERT INTO Veiculo (marca, modelo, placa, cor, anoFabricacao) values (?,?,?,?,?)";
       PreparedStatement stmt = con.prepareStatement(sql);
       stmt.setString(1,v.getMarca());
       stmt.setString(2,v.getModelo());
@@ -44,20 +44,63 @@ public class VeiculoDAO {
         con.close();
     }
     
-    public ArrayList<Veiculo> buscarAno() throws ClassNotFoundException, SQLException{
+    public ArrayList<Veiculo> buscar() throws ClassNotFoundException, SQLException{
         ResultSet rs;
         ArrayList<Veiculo> listaAno = new ArrayList();
         con = new Conexao().getConnection();
         String sql = "SELECT * FROM Veiculo";
         PreparedStatement stmt = con.prepareStatement(sql);
-        //stmt.setInt(5, anoFabricacaoV);  
         rs = stmt.executeQuery();
         while(rs.next()){
-            String marca = rs.getString("MARCA");
-            String modelo = rs.getString("MODELO");
-            String placa = rs.getString("PLACA");
-            String cor = rs.getString("COR"); 
-            int anoFabricacao = rs.getInt("ANO FABRICACAO");
+            String marca = rs.getString("marca");
+            String modelo = rs.getString("modelo");
+            String placa = rs.getString("placa");
+            String cor = rs.getString("cor"); 
+            int anoFabricacao = rs.getInt("anoFabricacao");
+            Veiculo vA = new Veiculo(marca, modelo, placa, cor,anoFabricacao);
+            listaAno.add(vA);
+        }
+        stmt.close();
+        con.close();
+        return listaAno;
+    }
+    
+    public ArrayList<Veiculo> buscarAno(int anoFabricacaoV) throws ClassNotFoundException, SQLException{
+        ResultSet rs;
+        ArrayList<Veiculo> listaAno = new ArrayList();
+        con = new Conexao().getConnection();
+        String sql = "SELECT * FROM Veiculo WHERE anoFabricacao = ?";
+        PreparedStatement stmt = con.prepareStatement(sql);
+        stmt.setInt(1, anoFabricacaoV);  
+        rs = stmt.executeQuery();
+        while(rs.next()){
+            String marca = rs.getString("marca");
+            String modelo = rs.getString("modelo");
+            String placa = rs.getString("placa");
+            String cor = rs.getString("cor"); 
+            int anoFabricacao = rs.getInt("anoFabricacao");
+            Veiculo vA = new Veiculo(marca, modelo, placa, cor,anoFabricacao);
+            listaAno.add(vA);
+        }
+        stmt.close();
+        con.close();
+        return listaAno;
+    }
+    
+    public ArrayList<Veiculo> buscarMarca(String marcaV) throws ClassNotFoundException, SQLException{
+        ResultSet rs;
+        ArrayList<Veiculo> listaAno = new ArrayList();
+        con = new Conexao().getConnection();
+        String sql = "SELECT * FROM Veiculo WHERE marca = ?";
+        PreparedStatement stmt = con.prepareStatement(sql);
+        stmt.setString(1, marcaV);
+        rs = stmt.executeQuery();
+        while(rs.next()){
+            String marca = rs.getString("marca");
+            String modelo = rs.getString("modelo");
+            String placa = rs.getString("placa");
+            String cor = rs.getString("cor"); 
+            int anoFabricacao = rs.getInt("anoFabricacao");
             Veiculo vA = new Veiculo(marca, modelo, placa, cor,anoFabricacao);
             listaAno.add(vA);
         }
