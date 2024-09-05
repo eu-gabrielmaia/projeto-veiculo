@@ -343,9 +343,7 @@ public class FrmVeiculo extends javax.swing.JFrame {
         try{
             vControl.cadastrar(marca, modelo, placa, cor, anoFabricacao);
             JOptionPane.showMessageDialog(null, "Veiculo cadastrado com sucesso!");
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        }catch(ClassNotFoundException e){
+        }catch(SQLException | ClassNotFoundException e){
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }//GEN-LAST:event_btnCadastrarActionPerformed
@@ -362,10 +360,11 @@ public class FrmVeiculo extends javax.swing.JFrame {
         int anoFabricacao = Integer.parseInt(tblVeiculo.getValueAt(linhaSelecionada, 4).toString());
         System.out.println("*****" +  marca + " " +  modelo + " " + placa + " " + cor + " " + anoFabricacao);
         try{
-            vControl.remover(marca, modelo, placa, cor, anoFabricacao);
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        }catch(ClassNotFoundException e){
+            int confirmacao = JOptionPane.showConfirmDialog(null,"Tem certeza que deseja excluir?");
+            if(confirmacao == JOptionPane.YES_OPTION) {
+                vControl.remover(marca, modelo, placa, cor, anoFabricacao);
+            }
+        }catch(SQLException | ClassNotFoundException e){
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
         dados.removeRow(linhaSelecionada);
@@ -397,9 +396,7 @@ public class FrmVeiculo extends javax.swing.JFrame {
              for (Veiculo v: listaMarca){
                  dados.addRow(new Object[]{v.getMarca(), v.getModelo(), v.getPlaca(), v.getCor(), v.getAnoFabricacao()});
              }
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        }catch(ClassNotFoundException e){
+        }catch(SQLException | ClassNotFoundException e){
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
 
