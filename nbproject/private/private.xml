@@ -3,10 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/aluno/Downloads/projeto-veiculo-main/projeto-veiculo-main/Projeto%20MVC/ProjetoVeiculo/src/model/Veiculo.java</file>
-            <file>file:/C:/Users/aluno/Downloads/projeto-veiculo-main/projeto-veiculo-main/Projeto%20MVC/ProjetoVeiculo/src/control/VeiculoControl.java</file>
-            <file>file:/C:/Users/aluno/Downloads/projeto-veiculo-main/projeto-veiculo-main/Projeto%20MVC/ProjetoVeiculo/src/view/FrmVeiculo.java</file>
-            <file>file:/C:/Users/aluno/Downloads/projeto-veiculo-main/projeto-veiculo-main/Projeto%20MVC/ProjetoVeiculo/src/model/DAO/VeiculoDAO.java</file>
+            <file>file:/C:/Users/gabri/Downloads/projeto-veiculo-main/src/control/VeiculoControl.java</file>
+            <file>file:/C:/Users/gabri/Downloads/projeto-veiculo-main/src/conexao/Conexao.java</file>
+            <file>file:/C:/Users/gabri/Downloads/projeto-veiculo-main/src/view/FrmVeiculo.java</file>
+            <file>file:/C:/Users/gabri/Downloads/projeto-veiculo-main/src/model/Veiculo.java</file>
+            <file>file:/C:/Users/gabri/Downloads/projeto-veiculo-main/src/model/DAO/VeiculoDAO.java</file>
         </group>
     </open-files>
 </project-private>

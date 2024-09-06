@@ -19,7 +19,7 @@ import model.Veiculo;
  * @author aluno
  */
 public class FrmVeiculo extends javax.swing.JFrame {
- private VeiculoControl vControl;
+    private VeiculoControl vControl;
     private DefaultTableModel dados;
     /**
      * Creates new form FrmProduto
@@ -41,7 +41,7 @@ public class FrmVeiculo extends javax.swing.JFrame {
     private void mostrar() throws SQLException, ClassNotFoundException { 
         try{
             ArrayList<Veiculo> listaVeiculo = vControl.mostrar();
-        dados.setNumRows(0);
+            dados.setNumRows(0);
         for(Veiculo v: listaVeiculo){
             dados.addRow(new Object[]{v.getMarca(), v.getModelo(), v.getPlaca(), v.getCor(), v.getAnoFabricacao()});
         }
@@ -363,11 +363,12 @@ public class FrmVeiculo extends javax.swing.JFrame {
             int confirmacao = JOptionPane.showConfirmDialog(null,"Tem certeza que deseja excluir?");
             if(confirmacao == JOptionPane.YES_OPTION) {
                 vControl.remover(marca, modelo, placa, cor, anoFabricacao);
+                dados.removeRow(linhaSelecionada);
             }
         }catch(SQLException | ClassNotFoundException e){
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
-        dados.removeRow(linhaSelecionada);
+        
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void txtCorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCorActionPerformed
